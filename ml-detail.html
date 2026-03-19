@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>机器学习 - AI知识科普</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6b8cae;
+            --accent-color: #5d8aa8;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+            --bg-gradient-start: #f5f7fa;
+            --bg-gradient-end: #e9ecf2;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --card-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            color: var(--text-dark);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            padding: 0 24px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .logo i { color: var(--primary-color); }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            background: rgba(74, 111, 165, 0.1);
+        }
+
+        /* 主内容 */
+        main {
+            padding-top: 72px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 24px 40px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px 60px;
+        }
+
+        /* 分类卡片 */
+        .category-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+        }
+
+        .category-card:hover {
+            box-shadow: var(--card-shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(74, 111, 165, 0.1);
+        }
+
+        .category-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .category-desc {
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+
+        /* 算法分组 */
+        .algo-group {
+            margin-bottom: 28px;
+        }
+
+        .algo-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .algo-group-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 16px;
+            padding: 10px 16px;
+            background: rgba(74, 111, 165, 0.06);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        /* 算法项 */
+        .algo-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .algo-item {
+            padding: 20px 24px;
+            background: rgba(74, 111, 165, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(74, 111, 165, 0.08);
+            transition: var(--transition);
+        }
+
+        .algo-item:hover {
+            background: rgba(74, 111, 165, 0.06);
+            border-color: rgba(74, 111, 165, 0.15);
+            transform: translateX(4px);
+        }
+
+        .algo-name {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .algo-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .algo-link:hover {
+            color: var(--accent-color);
+        }
+
+        .algo-link::after {
+            content: '\f054';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 0.75rem;
+            opacity: 0;
+            transform: translateX(-4px);
+            transition: var(--transition);
+        }
+
+        .algo-link:hover::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .algo-desc {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        .sub-algo-list {
+            margin-top: 12px;
+            padding-left: 16px;
+        }
+
+        .sub-algo-item {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            padding: 8px 0 8px 16px;
+            border-left: 2px solid rgba(74, 111, 165, 0.2);
+            margin-bottom: 6px;
+            line-height: 1.6;
+        }
+
+        .sub-algo-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .sub-algo-item strong {
+            color: var(--text-dark);
+        }
+
+        /* 高亮框 */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(74, 111, 165, 0.08), rgba(93, 138, 168, 0.05));
+            border-left: 4px solid var(--primary-color);
+            padding: 20px 24px;
+            border-radius: 0 12px 12px 0;
+            margin: 24px 0;
+        }
+
+        .highlight-box h4 {
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+        }
+
+        /* 页脚 */
+        footer {
+            background: rgba(45, 55, 72, 0.95);
+            color: white;
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .footer-copyright {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.9rem; }
+            .hero p { font-size: 1rem; }
+            .category-card { padding: 24px; }
+            .category-header { flex-direction: column; text-align: center; }
+            .algo-item { padding: 16px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="ai-knowledge-website.html" class="logo">
+                <i class="fas fa-brain"></i>
+                <span>AI知识科普</span>
+            </a>
+            <a href="ai-knowledge-website.html#ml" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                返回首页
+            </a>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main>
+        <section class="hero">
+            <h1><i class="fas fa-robot"></i> 机器学习</h1>
+            <p>让计算机从数据中自动学习的艺术。点击下方分类查看详细算法介绍。</p>
+        </section>
+
+        <div class="container">
+            <!-- 核心思想 -->
+            <div class="highlight-box">
+                <h4><i class="fas fa-lightbulb"></i> 核心思想</h4>
+                <p>与其编写固定规则告诉计算机"如何做"，不如提供大量示例让计算机自己"学会做"。</p>
+            </div>
+
+            <!-- 第一层：监督学习 -->
+            <div class="category-card" id="supervised">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <div>
+                        <div class="category-title">监督学习（Supervised Learning）</div>
+                        <div class="category-desc">使用带有标签的数据进行训练，即每个输入数据都有对应的正确答案</div>
+                    </div>
+                </div>
+
+                <div class="algo-group">
+                    <div class="algo-group-title">1. 回归算法（预测连续值，比如房价、温度）</div>
+                    <div class="algo-list">
+                        <div class="algo-item">
+                            <a href="linear-regression.html" class="algo-link">
+                                <div class="algo-name">线性回归（Linear Regression）</div>
+                            </a>
+                            <div class="algo-desc">用一条直线/平面拟合数据。简单、可解释性强，是理解机器学习核心思想的起点。</div>
+                        </div>
+                        <div class="algo-item">
+                            <div class="algo-name">岭回归 / Lasso回归（Ridge / Lasso Regression）</div>
+                            <div class="algo-desc">线性回归的改进版，通过加入正则化防止过拟合，尤其在特征很多时很有效。</div>
+                        </div>
+                        <div class="algo-item">
+                            <div class="algo-name">决策树回归 / 随机森林回归（Decision Tree / Random Forest Regression）</div>
+                            <div class="algo-desc">用树结构做回归，能捕捉非线性关系。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algo-group">
+                    <div class="algo-group-title">2. 分类算法（预测离散类别，比如垃圾邮件识别、图片分类）</div>
+                    <div class="algo-list">
+                        <div class="algo-item">
+                            <div class="algo-name">逻辑回归（Logistic Regression）</div>
+                            <div class="algo-desc">名字带"回归"，其实是分类算法。它在线性回归外面套了一个Sigmoid函数，输出属于某个类别的概率。是二分类问题的标配基线模型。</div>
+                        </div>
+                        <div class="algo-item">
+                            <div class="algo-name">K近邻（KNN - K-Nearest Neighbors）</div>
+                            <div class="algo-desc">思想极其简单——"近朱者赤，近墨者黑"。看一个新样本的k个最近邻居，少数服从多数决定类别。适合小型数据集。</div>
+                        </div>
+                        <div class="algo-item">
+                            <div class="algo-name">朴素贝叶斯（Naive Bayes）</div>
+                            <div class="algo-desc">基于概率论（贝叶斯定理）的分类器，假设特征相互独立。常用于文本分类（如垃圾邮件过滤）。</div>
+                        </div>
+                        <div class="algo-item">
+                            <div class="algo-name">支持向量机（SVM - Support Vector Machine）</div>
+                            <div class="algo-desc">核心思想是在高维空间中找到一个能最大化"间隔"的超平面，把不同类别的数据分开。在小样本、高维数据上表现优异。</div>
+                        </div>
+                        <div class="algo-item">
+                            <div class="algo-name">决策树（Decision Tree）</div>
+                            <div class="algo-desc">通过一系列if-then规则对数据进行分类，可解释性极强。常见的算法有ID3、C4.5、CART。</div>
+                        </div>
+                        <div class="algo-item">
+                            <div class="algo-name">集成学习（Ensemble Learning）</div>
+                            <div class="algo-desc">通过组合多个弱分类器来获得强分类器，是目前竞赛和工业界的宠儿。</div>
+                            <div class="sub-algo-list">
+                                <div class="sub-algo-item"><strong>随机森林（Random Forest）：</strong>Bagging（装袋）的代表，训练多棵决策树，然后投票。抗过拟合能力强。</div>
+                                <div class="sub-algo-item"><strong>梯度提升树（GBDT）：</strong>Boosting（提升）的代表，逐步添加新树来纠正前面树的错误。</div>
+                                <div class="sub-algo-item"><strong>XGBoost / LightGBM：</strong>GBDT的工程优化版，速度更快、效果更好，是表格数据挖掘的"大杀器"。</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第二层：无监督学习 -->
+            <div class="category-card" id="unsupervised">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div>
+                        <div class="category-title">无监督学习（Unsupervised Learning）</div>
+                        <div class="category-desc">数据没有标签，让算法自己探索隐藏结构</div>
+                    </div>
+                </div>
+
+                <div class="algo-group">
+                    <div class="algo-group-title">1. 聚类算法（把数据自动分组，比如客户分群）</div>
+                    <div class="algo-list">
+                        <div class="algo-item">
+                            <div class="algo-name">K-Means</div>
+                            <div class="algo-desc">最经典的聚类算法。指定要分成K个簇，算法不断迭代找到K个中心点，把离中心近的点归为一类。</div>
+                        </div>
+                        <div class="algo-item">
+                            <div class="algo-name">DBSCAN</div>
+                            <div class="algo-desc">基于密度的聚类，能发现任意形状的簇，并且能自动识别噪声点（离群点）。</div>
+                        </div>
+                        <div class="algo-item">
+                            <div class="algo-name">层次聚类（Hierarchical Clustering）</div>
+                            <div class="algo-desc">生成一个树状的聚类结构，可以按需切割成不同粒度的簇。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algo-group">
+                    <div class="algo-group-title">2. 降维算法（在保留关键信息的前提下，压缩数据维度）</div>
+                    <div class="algo-list">
+                        <div class="algo-item">
+                            <div class="algo-name">主成分分析（PCA - Principal Component Analysis）</div>
+                            <div class="algo-desc">通过线性变换，把高维数据投影到少数几个相互正交的方向上，这些方向就是"主成分"。</div>
+                        </div>
+                        <div class="algo-item">
+                            <div class="algo-name">t-SNE / UMAP</div>
+                            <div class="algo-desc">非线性降维方法，特别擅长把高维数据映射到二维或三维空间进行可视化，能很好地展示数据的聚类结构。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algo-group">
+                    <div class="algo-group-title">3. 关联规则学习（发现事物之间的共现关系）</div>
+                    <div class="algo-list">
+                        <div class="algo-item">
+                            <div class="algo-name">Apriori算法</div>
+                            <div class="algo-desc">经典算法，用于发现"买了尿布的顾客很可能也买啤酒"这类规则，常用于购物篮分析。</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第三层：强化学习 -->
+            <div class="category-card" id="reinforcement">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <div>
+                        <div class="category-title">强化学习（Reinforcement Learning）</div>
+                        <div class="category-desc">智能体在环境中行动，根据奖励或惩罚学习最佳策略</div>
+                    </div>
+                </div>
+
+                <div class="algo-list">
+                    <div class="algo-item">
+                        <div class="algo-name">Q-Learning</div>
+                        <div class="algo-desc">基础算法，维护一个Q表来记录在某个状态下采取某个动作能获得的未来奖励总和。</div>
+                    </div>
+                    <div class="algo-item">
+                        <div class="algo-name">Deep Q Network（DQN）</div>
+                        <div class="algo-desc">将深度学习与Q-Learning结合，用神经网络拟合Q函数，解决了高维状态空间的问题（如玩Atari游戏）。</div>
+                    </div>
+                    <div class="algo-item">
+                        <div class="algo-name">策略梯度（Policy Gradient）</div>
+                        <div class="algo-desc">直接优化策略函数，适合处理连续动作空间的问题。</div>
+                    </div>
+                    <div class="algo-item">
+                        <div class="algo-name">PPO（Proximal Policy Optimization）</div>
+                        <div class="algo-desc">OpenAI默认使用的强化学习算法，稳定且效果好。</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第四层：深度学习 -->
+            <div class="category-card" id="deeplearning">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div>
+                        <div class="category-title">深度学习（Deep Learning）</div>
+                        <div class="category-desc">基于多层神经网络的模型构建方法，可用于监督、无监督、强化学习等任务</div>
+                    </div>
+                </div>
+
+                <div class="algo-list">
+                    <div class="algo-item">
+                        <div class="algo-name">多层感知机（MLP - Multi-Layer Perceptron）</div>
+                        <div class="algo-desc">最基础的神经网络，由输入层、若干隐藏层、输出层组成。</div>
+                    </div>
+                    <div class="algo-item">
+                        <div class="algo-name">卷积神经网络（CNN - Convolutional Neural Network）</div>
+                        <div class="algo-desc">专门处理网格状数据（如图像），通过卷积核提取局部特征。代表：LeNet, AlexNet, ResNet。</div>
+                    </div>
+                    <div class="algo-item">
+                        <div class="algo-name">循环神经网络（RNN）及其变体（LSTM, GRU）</div>
+                        <div class="algo-desc">专门处理序列数据（如文本、时间序列），具有记忆能力。</div>
+                    </div>
+                    <div class="algo-item">
+                        <div class="algo-name">Transformer</div>
+                        <div class="algo-desc">当前大模型的基础架构，基于自注意力机制，彻底改变了NLP和CV领域。代表：BERT, GPT系列。</div>
+                    </div>
+                    <div class="algo-item">
+                        <div class="algo-name">图神经网络（GNN - Graph Neural Network）</div>
+                        <div class="algo-desc">专门处理图结构数据（如社交网络、分子结构）。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <i class="fas fa-brain"></i>
+                <span>AI知识科普</span>
+            </div>
+            <div class="footer-copyright"> 2025 AI知识科普 - 探索人工智能的奥秘</div>
+        </div>
+    </footer>
+</body>
+</html>
